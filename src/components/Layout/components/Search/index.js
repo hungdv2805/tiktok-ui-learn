@@ -6,6 +6,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
+
+import * as searchServices from '~/apiServices/searchServices';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import { SearchIcon } from '~/components/Icons';
 import AccountItem from '~/components/AccountItem';
@@ -25,22 +27,48 @@ function Search() {
   const inputRef = useRef()
 
   useEffect(() => {
-    if (!debounced) {
+    if (!debounced.trim()) {
         setSearchResult([])
       return
     }
     setLoading(true)
 
-    fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounced)}&type=less`)
-    .then((res) => res.json())
-    .then(res => {
-        setSearchResult(res.data)
+    // fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounced)}&type=less`)
+    // .then((res) => res.json())
+    // .then(res => {
+    //     setSearchResult(res.data)
+    //     setLoading(false)
+    // })
+    // .catch((err) => {
+    //     console.error(err)
+    //     setLoading(false)
+    // })
+
+    // request.get(`users/search`,{
+    //     params:{
+    //         q:debounced,
+    //         type: 'less'
+    //     }
+    // })
+    // .then(res => {
+    //     setSearchResult(res.data)
+    //     setLoading(false)
+    // })
+    // .catch((err) => {
+    //     console.error(err)
+    //     setLoading(false)
+    // })
+
+    const fetchApi = async () => {
+        setLoading(true)
+
+        const result = await searchServices.search(debounced)
+        setSearchResult(result)
+
         setLoading(false)
-    })
-    .catch((err) => {
-        console.error(err)
-        setLoading(false)
-    })
+    }
+    fetchApi()
+    
   }, [debounced])
 
   const handleClear = () => {
