@@ -89,7 +89,9 @@ function Search() {
     }
   }
   return ( 
+    <div>
       <HeadlessTippy
+        appendTo={()=> document.body}
         interactive
         visible={showResults && searchResult.length > 0}
         render={(attrs) => (
@@ -129,7 +131,8 @@ function Search() {
               <SearchIcon />
           </button>
       </div>
-  </HeadlessTippy>
+      </HeadlessTippy>
+    </div>
   );
 }
 
